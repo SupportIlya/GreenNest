@@ -1,0 +1,414 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>GreenNest — Eco Café & Mindful Retreat</title>
+  <style>
+    #welcome-modal {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background: rgba(0, 0, 0, 0.7);
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      z-index: 2000;
+    }
+
+    .modal-content {
+      background: white;
+      padding: 2.5rem;
+      border-radius: 20px;
+      text-align: center;
+      max-width: 500px;
+      box-shadow: 0 10px 30px rgba(0,0,0,0.2);
+      position: relative;
+    }
+
+    .modal-content h2 {
+      color: #00695c;
+      font-size: 1.8rem;
+      margin-bottom: 1rem;
+    }
+
+    .modal-content p {
+      font-size: 1.1rem;
+      color: #004d40;
+      line-height: 1.6;
+    }
+
+    .close-modal {
+      margin-top: 1.5rem;
+      background: #80cbc4;
+      color: white;
+      border: none;
+      padding: 10px 25px;
+      border-radius: 30px;
+      font-weight: 600;
+      cursor: pointer;
+      transition: background 0.3s;
+    }
+
+    .close-modal:hover {
+      background: #00695c;
+    }
+
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+      font-family: 'Segoe UI', system-ui, sans-serif;
+    }
+
+    :root {
+      --bg: #e0f7fa;
+      --accent: #80cbc4;
+      --text: #004d40;
+      --dark: #00695c;
+      --light: #f5fbfb;
+    }
+
+    body {
+      background-color: var(--bg);
+      color: var(--text);
+      overflow-x: hidden;
+    }
+
+    .parallax-header {
+      height: 100vh;
+      background-image: url('https://images.unsplash.com/photo-1501785888041-af3ef285b470?ixlib=rb-4.0.3&auto=format&fit=crop&w=1920&q=80');
+      background-attachment: fixed;
+      background-position: center;
+      background-repeat: no-repeat;
+      background-size: cover;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      align-items: center;
+      text-align: center;
+      padding: 0 20px;
+      position: relative;
+    }
+
+    .parallax-header::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background: rgba(224, 247, 250, 0.85);
+    }
+
+    .parallax-header > * {
+      position: relative;
+      z-index: 2;
+      max-width: 800px;
+    }
+
+    .parallax-header h1 {
+      font-size: 3.5rem;
+      font-weight: 300;
+      margin-bottom: 1.2rem;
+      color: var(--dark);
+      text-shadow: 0 2px 4px rgba(0,0,0,0.1);
+    }
+
+    .parallax-header p {
+      font-size: 1.4rem;
+      font-weight: 300;
+      line-height: 1.6;
+      color: var(--text);
+    }
+
+    nav {
+      position: fixed;
+      top: 0;
+      width: 100%;
+      background: rgba(224, 247, 250, 0.92);
+      backdrop-filter: blur(8px);
+      padding: 15px 0;
+      z-index: 1000;
+      box-shadow: 0 2px 10px rgba(0,0,0,0.05);
+    }
+
+    nav ul {
+      display: flex;
+      justify-content: center;
+      list-style: none;
+      gap: 30px;
+      flex-wrap: wrap;
+    }
+
+    nav a {
+      text-decoration: none;
+      color: var(--dark);
+      font-weight: 500;
+      font-size: 1.1rem;
+      transition: color 0.3s ease;
+    }
+
+    nav a:hover {
+      color: var(--accent);
+    }
+
+    section {
+      padding: 6rem 2rem;
+      max-width: 1000px;
+      margin: 0 auto;
+      opacity: 0;
+      transform: translateY(30px);
+      transition: opacity 0.8s ease, transform 0.8s ease;
+    }
+
+    section.visible {
+      opacity: 1;
+      transform: translateY(0);
+    }
+
+    h2 {
+      font-size: 2.2rem;
+      margin-bottom: 2.5rem;
+      color: var(--dark);
+      text-align: center;
+      font-weight: 300;
+    }
+
+    .features {
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: center;
+      gap: 25px;
+      margin-top: 30px;
+    }
+
+    .feature-card {
+      background: var(--light);
+      border-radius: 16px;
+      padding: 2rem;
+      width: 280px;
+      box-shadow: 0 6px 20px rgba(0, 105, 92, 0.08);
+      text-align: center;
+      transition: transform 0.4s ease, box-shadow 0.4s ease;
+    }
+
+    .feature-card:hover {
+      transform: translateY(-8px);
+      box-shadow: 0 10px 25px rgba(0, 105, 92, 0.15);
+    }
+
+    .feature-card h3 {
+      color: var(--accent);
+      margin: 15px 0 10px;
+      font-weight: 500;
+    }
+
+    .menu-item {
+      background: var(--light);
+      padding: 1.2rem;
+      margin: 1.2rem 0;
+      border-radius: 12px;
+      display: flex;
+      justify-content: space-between;
+      box-shadow: 0 3px 10px rgba(0,0,0,0.05);
+      transition: transform 0.3s ease;
+    }
+
+    .menu-item:hover {
+      transform: translateX(8px);
+    }
+
+    .menu-note {
+      text-align: center;
+      margin-top: 25px;
+      font-style: italic;
+    }
+
+    .events-list {
+      max-width: 600px;
+      margin: 0 auto 30px;
+      text-align: left;
+      padding-left: 20px;
+      line-height: 1.8;
+    }
+
+    .center {
+      text-align: center;
+    }
+
+    .btn {
+      display: inline-block;
+      background: var(--accent);
+      color: white;
+      padding: 12px 30px;
+      border-radius: 30px;
+      text-decoration: none;
+      font-weight: 600;
+      margin-top: 20px;
+      transition: background 0.3s ease, transform 0.2s ease;
+    }
+
+    .btn:hover {
+      background: var(--dark);
+      transform: scale(1.05);
+    }
+
+    .contact-info {
+      text-align: center;
+      margin: 25px 0;
+      font-size: 1.1rem;
+    }
+
+    footer {
+      background: var(--dark);
+      color: white;
+      text-align: center;
+      padding: 2.5rem 1.5rem;
+      margin-top: 4rem;
+    }
+
+    @media (max-width: 768px) {
+      .parallax-header h1 { font-size: 2.5rem; }
+      .parallax-header p { font-size: 1.1rem; }
+      nav ul { gap: 15px; }
+      section { padding: 4rem 1.5rem; }
+      .feature-card { width: 100%; }
+    }
+  </style>
+</head>
+<body>
+
+  <div id="welcome-modal">
+    <div class="modal-content">
+      <h2>🌿 Welcome to GreenNest!</h2>
+      <p>web-site creators Danil Bangert and Ilya Savvinov
+      </p>
+      <button class="close-modal">Enter the Space</button>
+    </div>
+  </div>
+
+  <div class="parallax-header">
+    <h1>🌿 GreenNest</h1>
+    <p>Eco café and mindful retreat in the heart of the city</p>
+  </div>
+
+  <nav>
+    <ul>
+      <li><a href="#about">About</a></li>
+      <li><a href="#menu">Menu</a></li>
+      <li><a href="#events">Events</a></li>
+      <li><a href="#contact">Contact</a></li>
+    </ul>
+  </nav>
+
+  <section id="about">
+    <h2>About GreenNest</h2>
+    <p style="text-align: center; max-width: 700px; margin: 0 auto 30px;">
+      We’re more than just a café. GreenNest blends healthy food, peaceful atmosphere, and conscious living.
+      Enjoy organic coffee, work in silence, join a yoga class, or simply unwind surrounded by plants and natural materials.
+    </p>
+    <div class="features">
+      <div class="feature-card">
+        <h3>🌱 100% Organic</h3>
+        <p>All ingredients are local, seasonal, and pesticide-free.</p>
+      </div>
+      <div class="feature-card">
+        <h3>♻️ Zero Waste</h3>
+        <p>We avoid single-use items and compost or recycle everything possible.</p>
+      </div>
+      <div class="feature-card">
+        <h3>🧘‍♀️ Soul Space</h3>
+        <p>Yoga, meditation, board games, and screen-free evenings.</p>
+      </div>
+    </div>
+  </section>
+
+  <section id="menu">
+    <h2>Our Menu</h2>
+    <div class="menu-item">
+      <span>Green Smoothie (spinach, banana, oats, almond milk)</span>
+      <strong>5.9 $</strong>
+    </div>
+    <div class="menu-item">
+      <span>Lentil Burger with Avocado & Sprouts</span>
+      <strong>3.1 $</strong>
+    </div>
+    <div class="menu-item">
+      <span>Herbal Tea “Forest Silence” (wild-harvested)</span>
+      <strong>1.8 $</strong>
+    </div>
+    <div class="menu-item">
+      <span>Sugar-Free Date & Cocoa Dessert</span>
+      <strong>2.3 $</strong>
+    </div>
+    <p class="menu-note">
+      Entire menu is vegan, refined-sugar-free, and gluten-free options available.
+    </p>
+  </section>
+
+  <section id="events">
+    <h2>Workshops & Events</h2>
+    <ul class="events-list">
+      <li><strong>Mon, Wed, Fri at 8:00 AM</strong> — Morning Yoga + Smoothie</li>
+      <li><strong>Tue at 7:00 PM</strong> — Candlelight Meditation</li>
+      <li><strong>Sat at 3:00 PM</strong> — DIY Eco Soap Workshop</li>
+      <li><strong>Sun at 5:00 PM</strong> — Screen-Free Board Game Night</li>
+    </ul>
+    <div class="center">
+      <a href="#contact" class="btn">Reserve Your Spot</a>
+    </div>
+  </section>
+
+  <section id="contact">
+    <h2>Find Us</h2>
+    <p class="contact-info">
+      📍 29 Serebryanicheskaya Street, Moscow<br>
+      📞 +7 (951) 348-33-22<br>
+      ✉️ hello@greennest.cafe
+    </p>
+    <div class="center">
+      <a href="https://wa.me/79991234567" class="btn">Message on WhatsApp</a>
+    </div>
+  </section>
+
+  <footer>
+    <p>&copy; 2025 GreenNest. All rights reserved.<br>
+    Eat mindfully. Rest deeply.</p>
+  </footer>
+
+  <script>
+    document.querySelector('.close-modal').addEventListener('click', () => {
+      document.getElementById('welcome-modal').style.display = 'none';
+    });
+
+    const observer = new IntersectionObserver((entries) => {
+      entries.forEach(entry => {
+        if (entry.isIntersecting) {
+          entry.target.classList.add('visible');
+        }
+      });
+    }, { threshold: 0.1 });
+
+    document.querySelectorAll('section').forEach(section => {
+      observer.observe(section);
+    });
+
+    document.querySelectorAll('nav a').forEach(anchor => {
+      anchor.addEventListener('click', function (e) {
+        e.preventDefault();
+        const targetId = this.getAttribute('href');
+        const targetSection = document.querySelector(targetId);
+        if (targetSection) {
+          window.scrollTo({
+            top: targetSection.offsetTop - 70,
+            behavior: 'smooth'
+          });
+        }
+      });
+    });
+  </script>
+</body>
+</html>
